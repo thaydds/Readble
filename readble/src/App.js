@@ -13,9 +13,9 @@ class App extends Component {
          <Header />
       <Switch>
         <Route exact path="/" component={Home} />
-        <Route exact path="/detail/:id?" component={PostDetail} />
-        <Route exact path="/add" component={PostForm} />
         <Route exact path="/edit/:id?" component={PostForm} />
+        <Route exact path="/:category/:id?" component={PostDetail} />
+        <Route exact path="/add" component={PostForm} />
         <Route exact path="/:category" component={Home} />
      </Switch>  
       </React.Fragment>    

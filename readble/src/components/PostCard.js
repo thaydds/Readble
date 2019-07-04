@@ -63,7 +63,7 @@ function PostCard(props) {
         <IconButton component={Link} to={`/edit/${post.id}`} color="primary" aria-label="edit">
           <Edit /> 
         </IconButton>
-        <IconButton component={Link} to={`/detail/${post.id}`} color="primary" aria-label="edit">
+        <IconButton component={Link} to={`/${post.category}/${post.id}`} color="primary" aria-label="edit">
           <PageView /> 
         </IconButton>
         <IconButton onClick={()=>props.deletePost(post)} style={{color:'red'}}>
