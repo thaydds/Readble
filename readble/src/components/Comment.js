@@ -9,6 +9,7 @@ import TextField from '@material-ui/core/TextField';
 import { withStyles } from '@material-ui/core/styles';
 import {withRouter} from 'react-router-dom'
 import { fetchComments, addComment, deleteComment, voteComment, editComment} from '../actions/comments'
+import { addCountComment, subCountComment} from '../actions/posts'
 import { connect } from 'react-redux'
 import CommnetBody from './ComentBody'
 
@@ -84,6 +85,7 @@ class Comment extends Component {
                     })}
                     value={this.state.body}
                     placeholder="Adicione um comentario"
+                    style={{backgroundColor: 'white'}}
                     InputProps={{
                       disableUnderline: true,
                       className: classes.searchInput,
@@ -91,7 +93,12 @@ class Comment extends Component {
                   />
                 </Grid>
                 <Grid item>
-                  <Button onClick={() => this.props.addComment(this.state)} variant="contained" color="primary" className={classes.addUser}>
+                  <Button onClick={() => {
+                    if(this.state.body !== '') {
+                      this.props.addComment(this.state)
+                      this.props.addCountComment(this.props.post)
+                    }
+                  }} variant="contained" color="primary" className={classes.addUser}>
                     Add Comment
                   </Button>
                 </Grid>
@@ -103,10 +110,12 @@ class Comment extends Component {
             commentList.map( c => {
               return  <div  key={c.id} className={classes.contentWrapper}>
                   <CommnetBody 
+                  subCountComment={this.props.subCountComment}
                   voteComment={this.props.voteComment} 
                   deleteComment={this.props.deleteComment}
                   editComment={this.props.editComment}
                   c = {c}
+                  post = {this.props.post}
                   />
               </div>
             })
@@ -129,6 +138,8 @@ function mapStateToProps ({ comments }) {
 
 const mapDispatchToProps = dispatch => ({
   fetchComments: id => dispatch(fetchComments(id)),
+  addCountComment: id => dispatch(addCountComment(id)),
+  subCountComment: id => dispatch(subCountComment(id)),
   addComment: comment => dispatch(addComment(comment)),
   deleteComment: comment => dispatch(deleteComment(comment)),
   voteComment: (id, option) => dispatch(voteComment(id, option)),

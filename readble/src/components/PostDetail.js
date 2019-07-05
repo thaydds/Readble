@@ -8,7 +8,7 @@ import IconButton from '@material-ui/core/IconButton';
 import { withStyles } from '@material-ui/core/styles';
 import Divider from '@material-ui/core/Divider'
 import {withRouter} from 'react-router-dom'
-import {  fetchPost, deletePost,votePostDetail} from '../actions/posts'
+import {  fetchPost, deletePost,votePostDetail, handleInitialData} from '../actions/posts'
 import { connect } from 'react-redux'
 import Edit from '@material-ui/icons/Edit'
 import Delete from '@material-ui/icons/Delete'
@@ -18,6 +18,10 @@ import Up from '@material-ui/icons/ThumbUpAlt'
 import Down from '@material-ui/icons/ThumbDownAlt'
 import Comments from './Comment'
 import {Link} from 'react-router-dom'
+import Comment from '@material-ui/icons/Comment'
+import { Redirect } from 'react-router'
+
+
 
 
 
@@ -58,16 +62,22 @@ class PostDetail extends Component {
     const param = pathArray[pathArray.length - 1];
     
       this.props.fetchPost(param)
+      this.props.fetchPosts()
     
   }
 
   render(){
     const { classes } = this.props;
-  
+
+   
+    
+  if(this.props.posts.post){
+    console.log('KEYS', Object.keys(this.props.posts.post).length)
+  }
+    
       return (
         <div>
-          {this.props.posts.post ? 
-          
+          {this.props.posts.post &&( Object.keys(this.props.posts.post).length > 0) ? 
           <Paper className={classes.paper}>
           <AppBar className={classes.searchBar} position="static" color="default" elevation={0}>
             <Toolbar>
@@ -101,22 +111,27 @@ class PostDetail extends Component {
               <IconButton component={Link} to={`/`} onClick={()=>this.props.deletePost(this.props.posts.post)} style={{color:'red'}}>
                 <Delete  />
               </IconButton>
+              <IconButton color='primary'>
+                <Comment  />
+              </IconButton>
+              <span>{this.props.posts.post.commentCount? this.props.posts.post.commentCount: 0}</span>
             </div>
             <Divider></Divider>
             <Typography variant='body2' align="center">
               {this.props.posts.post.body}
             </Typography>
           </div>
-        </Paper> : ''}
-        <Fab component={Link} to='/' style={{position: 'fixed',
+          <Fab component={Link} to='/' style={{position: 'fixed',
         bottom: '5px',
         left: '5px',
         margin: '8px auto'}} color='primary'>
         <ArrowBack />
         </Fab>
         <Grid>
-          <Comments />
+          <Comments post={this.props.posts.post} />
         </Grid>
+        </Paper> : this.props.posts.post &&( Object.keys(this.props.posts.post).length === 0) ? <Redirect to='/error' />: '' }
+        
         </div>
         
       );
@@ -131,6 +146,7 @@ function mapStateToProps ({ posts }) {
 
 const mapDispatchToProps = dispatch => ({
   fetchPost: id => dispatch(fetchPost(id)),
+  fetchPosts: category => dispatch(handleInitialData(category)),
   deletePost: id => dispatch(deletePost(id)),  
   votePost: (id, option) => dispatch(votePostDetail(id, option)),
 });

@@ -17,6 +17,7 @@ class ComentBody extends Component {
   }
   render() {
     let c = this.props.c
+    let post = this.props.post
     
     return(
       <div>
@@ -68,7 +69,9 @@ class ComentBody extends Component {
     </IconButton>
     <IconButton onClick={()=>{
       delete c.isEdit
-      this.props.deleteComment(c)}}   style={{color:'red'}} aria-label="Add to favorites">
+      this.props.deleteComment(c)
+      this.props.subCountComment(post)
+      }}   style={{color:'red'}} aria-label="Add to favorites">
       <Delete  />
     </IconButton>
       </div>
