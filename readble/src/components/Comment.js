@@ -67,11 +67,14 @@ class Comment extends Component {
   render(){
     const { classes } = this.props;
 
-    const commentList = Object.values(this.props.comments).map(c => {
-      let aux =  Object.assign({isEdit: false}, c)
-     
-      return aux
-    })
+    let commentList = []
+    if(this.props.comments.comments !== undefined){
+        commentList =this.props.comments.comments.map(c => {
+        let aux =  Object.assign({isEdit: false}, c)
+        return aux
+      })
+    }
+    
       return (
         <Paper className={classes.paper}>
           <AppBar className={classes.searchBar} position="static" color="default" elevation={0}>
@@ -106,7 +109,8 @@ class Comment extends Component {
             </Toolbar>
           </AppBar> 
           {
-            Object.keys(this.props.comments).length > 0 ?
+           this.props.comments.comments !== undefined ?
+           this.props.comments.comments.length > 0 ?
             commentList.map( c => {
               return  <div  key={c.id} className={classes.contentWrapper}>
                   <CommnetBody 
@@ -118,7 +122,7 @@ class Comment extends Component {
                   post = {this.props.post}
                   />
               </div>
-            })
+            }) : ''
              :
            <Typography  color="textSecondary">
             NO COMMENTS

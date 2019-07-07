@@ -67,13 +67,7 @@ class PostDetail extends Component {
   }
 
   render(){
-    const { classes } = this.props;
-
-   
-    
-  if(this.props.posts.post){
-    console.log('KEYS', Object.keys(this.props.posts.post).length)
-  }
+    const { classes } = this.props
     
       return (
         <div>
@@ -98,11 +92,11 @@ class PostDetail extends Component {
              {`by: ${this.props.posts.post.author}`}
             </Typography>
             <div>
-              <IconButton onClick={()=>{this.props.votePost(this.props.posts.post.id, "upVote")}} style={{color:'green'}} className={classes.button} aria-label="Delete">
+              <IconButton onClick={()=>{this.props.votePostDetail(this.props.posts.post, "upVote")}} style={{color:'green'}} className={classes.button} aria-label="Delete">
                 <Up />
               </IconButton>
               <span>{this.props.posts.post.voteScore}</span>
-              <IconButton onClick={()=>{this.props.votePost(this.props.posts.post.id, "downVote")}} style={{color:'red'}} className={classes.button} aria-label="Delete"  color="primary">
+              <IconButton onClick={()=>{this.props.votePostDetail(this.props.posts.post, "downVote")}} style={{color:'red'}} className={classes.button} aria-label="Delete"  color="primary">
                 <Down />
               </IconButton>
               <IconButton component={Link} to={`/edit/${this.props.posts.post.id}`} color="primary" aria-label="edit">
@@ -148,7 +142,7 @@ const mapDispatchToProps = dispatch => ({
   fetchPost: id => dispatch(fetchPost(id)),
   fetchPosts: category => dispatch(handleInitialData(category)),
   deletePost: id => dispatch(deletePost(id)),  
-  votePost: (id, option) => dispatch(votePostDetail(id, option)),
+  votePostDetail: (post, option) => dispatch(votePostDetail(post, option)),
 });
 
 export default connect(

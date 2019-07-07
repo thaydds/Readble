@@ -9,7 +9,8 @@ export const EDIT_POST = "EDIT_POST";
 export const ADD_POST = "ADD_POST";
 export const ADD_COUNT_COMMENT = " ADD_COUNT_COMMENT";
 export const SUB_COUNT_COMMENT = "SUB_COUNT_COMMENT";
-
+export const VOTE_POST = "VOTE_POST";
+export const VOTE_POST_DETAIL = "VOTE_POST_DETAIL";
 
 
 
@@ -35,10 +36,10 @@ export const addPost = post => {
     ...post,
     timestamp: Date.now()
   };
-
+  
   return dispatch => {
     return api.addPost(post).then(post => 
-        dispatch({
+          dispatch({
           type: ADD_POST,
           post
         })
@@ -82,30 +83,43 @@ export const deletePost = post => {
 };
 
 export const votePost = (id, option) => {
+  let vote
+  if(option === 'upVote'){
+    vote = 1
+  }
+  if(option === 'downVote'){
+    vote = -1
+  }
   return dispatch => {
     return api.votePost(id, option).then(post =>
-    {
-      api.getPosts().then(posts =>
+    { 
       dispatch({
-        type: RECEIVE_POSTS,
-        posts
+        type: VOTE_POST,
+        id,
+        vote,
       })
-    )}
+    }
     );
   };
 };
 
-export const votePostDetail = (id, option) => {
-
+export const votePostDetail = (postDetail, option) => {
+  let vote
+  if(option === 'upVote'){
+    vote = 1
+  }
+  if(option === 'downVote'){
+    vote = -1
+  }
   return dispatch => {
-    return api.votePost(id, option).then(post =>
+    return api.votePost(postDetail.id, option).then(post =>
   {
-    api.fetchPost(id).then(post =>
     dispatch({
-      type: RECEIVE_POST,
-      post
+      type: VOTE_POST_DETAIL,
+      postDetail,
+      vote
     })
-  )}
+  }
     );
   };
 };

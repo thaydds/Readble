@@ -3,6 +3,12 @@ import * as api from'../http'
 export const RECEIVE_COMMENTS = "RECEIVE_COMMENTS";
 export const RECEIVE_COMMENT = "RECEIVE_COMMENT";
 
+export const DELETE_COMMENT = "DELETE_COMMENT";
+export const EDIT_COMMENT = "EDIT_COMMENT";
+export const ADD_COMMENT = "ADD_COMMENT";
+export const VOTE_COMMENT = " VOTE_COMMENT";
+
+
 export const fetchComments = id => {
   return dispatch => {
     return api.fetchComments(id).then(comments =>
@@ -26,14 +32,21 @@ export const fetchComment = id => {
 };
 
 export const voteComment = (id, option) => {
+  let vote
+  if(option === 'upVote'){
+    vote = 1
+  }
+  if(option === 'downVote'){
+    vote = -1
+  }
   return dispatch => {
     return api.voteComment(id, option).then(comment =>
-      api.fetchComments(comment.parentId).then(comments =>
         dispatch({
-          type: RECEIVE_COMMENTS,
-          comments
+          type: VOTE_COMMENT,
+          id,
+          vote
         })
-      )
+      
     );
   };
 };
@@ -47,12 +60,12 @@ export const addComment = comment => {
  
   return dispatch => {
     return api.addComment(comment).then(comment =>
-      api.fetchComments(comment.parentId).then(comments =>
+      
         dispatch({
-          type: RECEIVE_COMMENTS,
-          comments
+          type:ADD_COMMENT,
+          comment
         })
-      )
+      
     );
   };
 };
@@ -60,12 +73,11 @@ export const addComment = comment => {
 export const deleteComment = comment => {
   return dispatch => {
     return api.deleteComment(comment).then(comment =>
-      api.fetchComments(comment.parentId).then(comments =>
         dispatch({
-          type: RECEIVE_COMMENTS,
-          comments
+          type: DELETE_COMMENT,
+          comment
         })
-      )
+      
     );
   };
 };
@@ -73,12 +85,10 @@ export const deleteComment = comment => {
 export const editComment = comment => {
   return dispatch => {
     return api.editComment(comment).then(comment =>
-      api.fetchComments(comment.parentId).then(comments =>
         dispatch({
-          type: RECEIVE_COMMENTS,
-          comments
+          type: EDIT_COMMENT,
+          comment
         })
-      )
     );
   };
 };
